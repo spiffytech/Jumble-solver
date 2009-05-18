@@ -1,5 +1,7 @@
 import cPickle as pickle
 
+from classes import Jumble, Word
+
 def main():
     dictFile = file("words.pickle")
     dict = pickle.load(dictFile)
@@ -24,25 +26,19 @@ def main():
 
 
 
-class Jumble:
-    def __init__(self, original=""):
-        self.original = original
-        self.agrams = []
-        self.positions = []
-
-
-
 def solve(jumbles, dict):
     '''Takes the solved individual jumbles and solves the punchline'''
-    jumble = ""
+    freq = pickle.load(file("word_frequency.pickle"))
+    jumble = Jumble()
 
     for j in jumbles:
         for a in j.agrams:
             for p in j.positions:
-                jumble += a[p]
+                jumble.original += a[p]
 
-    agrams = findWord(jumble, dict)
-    print agrams.sort()
+    jumble.agrams = findWord(jumble.original, dict)
+    w = Word()
+    print sorted(jumble.agrams, w.freq_compare).reverse()
 
 
 
