@@ -4,18 +4,24 @@ def main():
     dictFile = file("words.pickle")
     dict = pickle.load(dictFile)
     jumbles = []
-    for i in range(0, 5):
-        j = raw_input("Next jumbled word: ")
-        if j == "":
+    for i in range(0, 7):  # Get jumbles from the user and process them
+        j = Jumble()
+        j.original = raw_input("Next jumbled word: ")
+        if j.original == "":
             break
+        positions = raw_input("Important positions in this word: ")
+        j.positions = positions.split(",")
+        for i in range(0, len(j.positions)):
+            j.positions[i] = int(j.positions[i])
+            j.positions[i] = j.positions[i]-1
 
-        jumble = Jumble(j)
-        jumble.agrams = findWord(jumble.original, dict)
-        jumbles.append(jumble)
+        j.agrams = findWord(j.original, dict)
+        jumbles.append(j)
 
+#    for j in jumbles:
+#        print j.agrams
+    solve(jumbles, dict)
 
-    for word in jumbles:
-        print word.agrams
 
 
 class Jumble:
@@ -26,21 +32,24 @@ class Jumble:
 
 
 
-def solve(jumbles):
-    dictFile = file("words")
-    dict = pickle.load(dictFile)
+def solve(jumbles, dict):
+    '''Takes the solved individual jumbles and solves the punchline'''
+    jumble = ""
 
-    words = []
     for j in jumbles:
-        words.append()
+        for a in j.agrams:
+            for p in j.positions:
+                jumble += a[p]
+
+    agrams = findWord(jumble, dict)
+    print agrams.sort()
 
 
 
-
-def findWord(jumble, words):
-    '''Returns a words of words with all of the same letters as the original word'''
-    newwords = []
-    for word in words:
+def findWord(jumble, dict):
+    '''Returns a list of anagrams of the jumbled word'''
+    agrams = []
+    for word in dict:
         isOK = False  # Did the current word pass the test?
         if len(jumble) != len(word):  # Only single words for now
             continue
@@ -52,11 +61,15 @@ def findWord(jumble, words):
                 isOK = True
 
         if isOK == True:
-            newwords.append(word)
+            agrams.append(word)
         isOK = False
 
-    return newwords
+    return agrams
+
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        pass
