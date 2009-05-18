@@ -31,35 +31,32 @@ def solve(jumbles, dict):
     freq = pickle.load(file("word_frequency.pickle"))
     jumble = Jumble()
 
+    # Isolate the important letters from the solved jumbles
     for j in jumbles:
         for a in j.agrams:
             for p in j.positions:
                 jumble.original += a[p]
 
+    # Find anagrams of the final character set
+    print "Final stage..."
     jumble.agrams = findWord(jumble.original, dict)
-    w = Word()
-    print sorted(jumble.agrams, w.freq_compare).reverse()
+    print jumble.agrams
+#    w = Word()
+#    print sorted(jumble.agrams, w.freq_compare)
 
 
 
 def findWord(jumble, dict):
     '''Returns a list of anagrams of the jumbled word'''
     agrams = []
-    for word in dict:
-        isOK = False  # Did the current word pass the test?
-        if len(jumble) != len(word):  # Only single words for now
-            continue
+#    print dict.keys()
+    try:
+        agrams = dict["".join(sorted(list(jumble)))]
+    except:
+        print "No such key: " + "".join(sorted(list(jumble)))
+        agrams = None
 
-        for letter in jumble:
-            if not jumble.count(letter) == word.count(letter):
-                break
-            if letter == jumble[len(jumble)-1]:
-                isOK = True
-
-        if isOK == True:
-            agrams.append(word)
-        isOK = False
-
+    print agrams
     return agrams
 
 
