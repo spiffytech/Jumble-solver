@@ -1,7 +1,7 @@
 import cPickle as pickle
 
 def main():
-    dictFile = file("words")
+    dictFile = file("words.pickle")
     dict = pickle.load(dictFile)
     jumbles = []
     for i in range(0, 5):
@@ -9,18 +9,20 @@ def main():
         if j == "":
             break
 
-        jumbles.append([])
-        jumbles[i].append(j)
-        jumbles[i].append(findWord(jumbles[i][0], dict))
+        jumble = Jumble(j)
+        jumble.agrams = findWord(jumble.original, dict)
+        jumbles.append(jumble)
+
 
     for word in jumbles:
-        print word[1]
+        print word.agrams
 
 
-class jumble:
-    original = ""
-    agrams = []
-    positions = []
+class Jumble:
+    def __init__(self, original=""):
+        self.original = original
+        self.agrams = []
+        self.positions = []
 
 
 
