@@ -1,0 +1,1 @@
+This project was supposed to solve the Daily Jumble from the newspaper. It vill inscramble individual words, but doesn't unscramble the final jumble- the design approach I took doesn't handle unscrambling multipse words. I didn't care enough to redesign the tool.
