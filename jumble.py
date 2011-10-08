@@ -6,7 +6,8 @@ def main():
     dictFile = file("words.pickle")
     dict = pickle.load(dictFile)
     jumbles = []
-    for i in range(0, 7):  # Get jumbles from the user and process them
+    i = 0
+    while 1:  # Get jumbles from the user and process them
         j = Jumble()
         j.original = raw_input("Next jumbled word: ")
         if j.original == "":
@@ -19,9 +20,8 @@ def main():
 
         j.agrams = findWord(j.original, dict)
         jumbles.append(j)
+        i+=1
 
-#    for j in jumbles:
-#        print j.agrams
     solve(jumbles, dict)
 
 
@@ -30,19 +30,21 @@ def solve(jumbles, dict):
     '''Takes the solved individual jumbles and solves the punchline'''
     freq = pickle.load(file("word_frequency.pickle"))
     jumble = Jumble()
+    agrams = []
 
     # Isolate the important letters from the solved jumbles
     for j in jumbles:
-        for a in j.agrams:
-            for p in j.positions:
-                jumble.original += a[p]
+        jumble.agrams = []
+        for ana in j.agrams:
+            for pos in j.positions:
+                jumble.original += ana[pos]
 
     # Find anagrams of the final character set
-    print "Final stage..."
-    jumble.agrams = findWord(jumble.original, dict)
-    print jumble.agrams
-#    w = Word()
-#    print sorted(jumble.agrams, w.freq_compare)
+        try:
+            jumble.agrams += findWord(jumble.original, dict)
+            print jumble.agrams
+        except:
+            pass
 
 
 
